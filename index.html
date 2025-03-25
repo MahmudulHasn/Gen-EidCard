@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,97 +8,174 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Winky+Sans&display=swap" rel="stylesheet">
+
+    <style>
+        #ecard {
+            background: linear-gradient(0deg, rgba(0, 35, 36, 0.7) 0%, rgba(72, 72, 62, 0.7) 100%);
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            transition: background 0.5s ease-in-out;
+            /* Smooth transition effect */
+        }
+    </style>
 </head>
-<body class="bg-green-100 flex items-center justify-center min-h-screen">
-    <div class="bg-amber-300 p-6 rounded-xl shadow-lg text-center">
-        <h2 class="text-xl font-bold text-green-700 pb-3">Eid E-Card Generator</h2>
-        <div id="ecard" class="relative w-80 h-80 p-4 rounded-lg flex flex-col items-center justify-center shadow-md overflow-hidden" 
-            style="background-image: url('./images/pexels-apyfz-30947036.jpg'), linear-gradient(rgba(0, 0, 0, 0.5), rgba(52, 33, 0, 0.9)); background-blend-mode: overlay; background-size: cover; background-position: center;">
-            <!-- Crescent Moon and Stars -->
-            <div class="absolute top-4 left-4 text-white text-4xl">★</div>
-            <div class="absolute top-6 right-6 text-yellow-300 text-xl">★</div>
-            <div class="absolute top-10 right-10 text-white text-sm">★</div>
-            
-            <h1 class="text-2xl font-bold text-white drop-shadow-lg">Eid Mubarak!</h1>
-            <p id="nameText" class="text-lg text-white mt-2 drop-shadow-lg">[Your Name]</p>
-            <p id="hadithText" class="text-sm text-white mt-5 pt-5 italic text-center drop-shadow-lg"></p>
+
+<body class="flex items-center justify-center min-h-screen backdrop-blur-sm overflow-hidden"
+    style="background: url('./images/bg-01.jpg'), linear-gradient(0deg, rgba(83, 84, 84, 0.97) 0%, rgba(106, 106, 105, 0.975) 100%); background-blend-mode: overlay; background-size: cover; background-position: center;">
+    <div class="p-12 shadow-lg text-center">
+        <h2 class="text-3xl font-bold text-white pb-3" style="font-family: 'Winky Sans', sans-serif;">Eid E-Card
+            Generator</h2>
+        <div id="ecard"
+            class="relative w-80 h-80 p-4 flex flex-col items-center justify-center shadow-md overflow-hidden">
+            <div class="absolute top-0 right-0 text-white opacity-75"> <img src="./images/template.png" alt=""></div>
+
+            <h1 class="text-3xl font-bold text-amber-400 drop-shadow-lg"
+                style="font-family: 'Dancing Script', cursive;">EID MUBARAK !</h1>
+            <p id="nameText" class="text-md text-white mt-2 drop-shadow-lg "
+                style="font-family: 'Winky Sans', sans-serif;">[Write a Name]</p>
+            <p id="hadithText" class="text-sm text-white font-bold mt-5 pt-5 italic text-center drop-shadow-lg hidden"
+                style="font-family: 'Winky Sans', sans-serif;"></p>
         </div>
-        <input type="text" id="nameInput" placeholder="Enter your name" class="p-2 rounded w-full mt-4">
-        <button onclick="updateCard()" class="bg-green-600 text-white px-4 py-2 mt-2 rounded">Generate</button>
-        <button onclick="downloadPDF()" class="bg-blue-600 text-white px-4 py-2 mt-2 rounded">Download PDF</button>
+        <input type="text" id="nameInput" placeholder="Write your name .."
+            class="p-2 rounded bg-gray-900/50 text-white w-full mt-4 focus:outline-none">
+        <button onclick="updateCard()" class="bg-green-700 text-white px-4 py-2 mt-2 rounded">Generate</button>
+        <button onclick="downloadPDF()" class="bg-amber-500 text-white px-4 py-2 mt-2 rounded">Download Card</button>
     </div>
 
     <script>
-const hadiths = [
-    "The Prophet (ﷺ) said, 'Whoever fasts the month of Ramadan out of faith and in the hope of reward, his past sins will be forgiven.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'Eid al-Fitr is a day of reward, a day of joy, and a day when Allah forgives the sins of those who fasted and prayed during Ramadan.' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'On the day of Eid, every Muslim is obligated to pay Zakat al-Fitr to purify his fast and to help those in need.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'On the day of Eid, Allah looks at His servants, and those who were fasting are forgiven.' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'Whoever helps a person in need on the day of Eid will be granted Allah’s mercy.' (Sunan Ibn Majah)",
-    "The Prophet (ﷺ) said, 'The best day for fasting after Ramadan is the day of Arafah (Eid al-Adha).' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'There is no better charity than that given on the day of Eid.' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'Give charity generously on the day of Eid to help those in need.' (Sunan Abu Dawood)",
-    "The Prophet (ﷺ) said, 'On Eid, Allah commands His angels to go to the marketplaces and call out: 'O you who have fasted, come forward and receive your reward from your Lord.'' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'Give a portion of your wealth to those who are in need, especially on the day of Eid.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'Eid is a day of joy, a day when people give charity and increase good deeds.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'Perform the Eid prayer and pay the Zakat al-Fitr in the morning to purify yourself and your wealth.' (Sunan Ibn Majah)",
-    "The Prophet (ﷺ) said, 'It is a Sunnah to perform the Eid prayer in congregation.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'Give gifts to one another on Eid, for it increases love between you.' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'On the day of Eid, it is a time to spread happiness by helping others, especially those less fortunate.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'Whoever offers the Eid prayer, his sins will be forgiven, and he will be raised in rank with Allah.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'Eid is a time to rejoice, but the best rejoicing is to help those in need.' (Sunan Abu Dawood)",
-    "The Prophet (ﷺ) said, 'Give charity during Eid, for it is a way to purify your wealth and earn Allah’s reward.' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'Help others, especially on the day of Eid, for there is no greater reward than giving on this day.' (Sunan Ibn Majah)",
-    "The Prophet (ﷺ) said, 'Eid is a time of thanking Allah and offering charity to purify your fast.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'Make your Eid celebrations a time for helping others, and Allah will reward you in this life and the Hereafter.' (Sunan Ibn Majah)",
-    "The Prophet (ﷺ) said, 'The day of Eid is a time for reflection, for thanking Allah, and for giving charity to others.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'On the day of Eid, ensure that no one is left hungry, and strive to feed those in need.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'Give Zakat al-Fitr before the Eid prayer so that the poor may rejoice on the day of Eid.' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'Eid is a time for reflection and giving; help others and seek Allah’s forgiveness.' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'Help the poor and needy during Eid, for this is an act that brings reward from Allah.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'On Eid, reward is given to those who do good deeds and help others.' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'Eid is not just about feasting; it is about helping others and doing good deeds.' (Sunan Abu Dawood)",
-    "The Prophet (ﷺ) said, 'Make your Eid meaningful by helping those around you and giving back to society.' (Sunan Ibn Majah)",
-    "The Prophet (ﷺ) said, 'On Eid, Allah blesses those who reach out to others with kindness and generosity.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'On the day of Eid, gather in peace and joy, remembering Allah and helping one another.' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'On Eid, give charity so that none of the poor are left behind.' (Sunan Ibn Majah)",
-    "The Prophet (ﷺ) said, 'The charity given on Eid purifies the fast and brings joy to the hearts of those in need.' (Sunan Ibn Majah)",
-    "The Prophet (ﷺ) said, 'Eid is a day of thanking Allah, sharing food, and giving to those who are less fortunate.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'On the day of Eid, Allah blesses those who help others in their time of need.' (Sunan Ibn Majah)",
-    "The Prophet (ﷺ) said, 'Take the opportunity of Eid to forgive, to seek peace, and to help those in need.' (Sunan Abu Dawood)",
-    "The Prophet (ﷺ) said, 'On Eid, help the poor and give gifts to one another to increase love.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'The best of you are those who give the most during the month of Ramadan and on Eid.' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'On Eid, help others, for Allah will help you in your time of need.' (Sunan Abu Dawood)",
-    "The Prophet (ﷺ) said, 'Let the celebration of Eid be a time to renew your faith and show kindness to others.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'Eid is a time for charity and love; help others and seek Allah’s mercy.' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'On the day of Eid, the angels pray for forgiveness for those who give charity.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'On Eid, make your celebrations a time for spreading joy and giving generously.' (Sunan Abu Dawood)",
-    "The Prophet (ﷺ) said, 'The greatest joy on Eid comes from doing good deeds and helping those in need.' (Sunan Abu Dawood)",
-    "The Prophet (ﷺ) said, 'On the day of Eid, share happiness with others and do good deeds.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'On Eid, reward is given to those who do good deeds and help others.' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'Eid is a time to thank Allah, forgive others, and increase your acts of kindness.' (Sunan Abu Dawood)",
-    "The Prophet (ﷺ) said, 'On the day of Eid, feed the poor and give generously, for Allah rewards those who help others.' (Sunan Ibn Majah)",
-    "The Prophet (ﷺ) said, 'On Eid, be kind and help others, and your reward will be multiplied by Allah.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'Eid is a time for helping others, forgiving, and spreading joy.' (Sahih Muslim)",
-    "The Prophet (ﷺ) said, 'Give to the poor during Eid, so that they may feel joy and not be in need.' (Sahih Bukhari)",
-    "The Prophet (ﷺ) said, 'Eid is a time of community and unity. Help each other and strengthen your bonds.' (Sahih Bukhari)"
-];
+        const hadiths = [
+            "The Prophet (ﷺ) said, 'Whoever fasts the month of Ramadan out of faith and in the hope of reward, his past sins will be forgiven.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'Eid al-Fitr is a day of reward, a day of joy, and a day when Allah forgives the sins of those who fasted and prayed during Ramadan.' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'On the day of Eid, every Muslim is obligated to pay Zakat al-Fitr to purify his fast and to help those in need.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'On the day of Eid, Allah looks at His servants, and those who were fasting are forgiven.' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'Whoever helps a person in need on the day of Eid will be granted Allah’s mercy.' (Sunan Ibn Majah)",
+            "The Prophet (ﷺ) said, 'The best day for fasting after Ramadan is the day of Arafah (Eid al-Adha).' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'There is no better charity than that given on the day of Eid.' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'Give charity generously on the day of Eid to help those in need.' (Sunan Abu Dawood)",
+            "The Prophet (ﷺ) said, 'On Eid, Allah commands His angels to go to the marketplaces and call out: 'O you who have fasted, come forward and receive your reward from your Lord.'' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'Give a portion of your wealth to those who are in need, especially on the day of Eid.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'Eid is a day of joy, a day when people give charity and increase good deeds.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'Perform the Eid prayer and pay the Zakat al-Fitr in the morning to purify yourself and your wealth.' (Sunan Ibn Majah)",
+            "The Prophet (ﷺ) said, 'It is a Sunnah to perform the Eid prayer in congregation.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'Give gifts to one another on Eid, for it increases love between you.' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'On the day of Eid, it is a time to spread happiness by helping others, especially those less fortunate.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'Whoever offers the Eid prayer, his sins will be forgiven, and he will be raised in rank with Allah.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'Eid is a time to rejoice, but the best rejoicing is to help those in need.' (Sunan Abu Dawood)",
+            "The Prophet (ﷺ) said, 'Give charity during Eid, for it is a way to purify your wealth and earn Allah’s reward.' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'Help others, especially on the day of Eid, for there is no greater reward than giving on this day.' (Sunan Ibn Majah)",
+            "The Prophet (ﷺ) said, 'Eid is a time of thanking Allah and offering charity to purify your fast.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'Make your Eid celebrations a time for helping others, and Allah will reward you in this life and the Hereafter.' (Sunan Ibn Majah)",
+            "The Prophet (ﷺ) said, 'The day of Eid is a time for reflection, for thanking Allah, and for giving charity to others.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'On the day of Eid, ensure that no one is left hungry, and strive to feed those in need.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'Give Zakat al-Fitr before the Eid prayer so that the poor may rejoice on the day of Eid.' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'Eid is a time for reflection and giving; help others and seek Allah’s forgiveness.' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'Help the poor and needy during Eid, for this is an act that brings reward from Allah.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'On Eid, reward is given to those who do good deeds and help others.' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'Eid is not just about feasting; it is about helping others and doing good deeds.' (Sunan Abu Dawood)",
+            "The Prophet (ﷺ) said, 'Make your Eid meaningful by helping those around you and giving back to society.' (Sunan Ibn Majah)",
+            "The Prophet (ﷺ) said, 'On Eid, Allah blesses those who reach out to others with kindness and generosity.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'On the day of Eid, gather in peace and joy, remembering Allah and helping one another.' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'On Eid, give charity so that none of the poor are left behind.' (Sunan Ibn Majah)",
+            "The Prophet (ﷺ) said, 'The charity given on Eid purifies the fast and brings joy to the hearts of those in need.' (Sunan Ibn Majah)",
+            "The Prophet (ﷺ) said, 'Eid is a day of thanking Allah, sharing food, and giving to those who are less fortunate.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'On the day of Eid, Allah blesses those who help others in their time of need.' (Sunan Ibn Majah)",
+            "The Prophet (ﷺ) said, 'Take the opportunity of Eid to forgive, to seek peace, and to help those in need.' (Sunan Abu Dawood)",
+            "The Prophet (ﷺ) said, 'On Eid, help the poor and give gifts to one another to increase love.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'The best of you are those who give the most during the month of Ramadan and on Eid.' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'On Eid, help others, for Allah will help you in your time of need.' (Sunan Abu Dawood)",
+            "The Prophet (ﷺ) said, 'Let the celebration of Eid be a time to renew your faith and show kindness to others.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'Eid is a time for charity and love; help others and seek Allah’s mercy.' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'On the day of Eid, the angels pray for forgiveness for those who give charity.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'On Eid, make your celebrations a time for spreading joy and giving generously.' (Sunan Abu Dawood)",
+            "The Prophet (ﷺ) said, 'The greatest joy on Eid comes from doing good deeds and helping those in need.' (Sunan Abu Dawood)",
+            "The Prophet (ﷺ) said, 'On the day of Eid, share happiness with others and do good deeds.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'On Eid, reward is given to those who do good deeds and help others.' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'Eid is a time to thank Allah, forgive others, and increase your acts of kindness.' (Sunan Abu Dawood)",
+            "The Prophet (ﷺ) said, 'On the day of Eid, feed the poor and give generously, for Allah rewards those who help others.' (Sunan Ibn Majah)",
+            "The Prophet (ﷺ) said, 'On Eid, be kind and help others, and your reward will be multiplied by Allah.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'Eid is a time for helping others, forgiving, and spreading joy.' (Sahih Muslim)",
+            "The Prophet (ﷺ) said, 'Give to the poor during Eid, so that they may feel joy and not be in need.' (Sahih Bukhari)",
+            "The Prophet (ﷺ) said, 'Eid is a time of community and unity. Help each other and strengthen your bonds.' (Sahih Bukhari)"
+        ];
 
+        const images = [
+            "./images/card-img-01.jpg",
+            "./images/card-img-02.jpg",
+            "./images/card-img-03.jpg",
+            "./images/card-img-04.jpg",
+            "./images/card-img-05.jpg",
+            "./images/card-img-06.jpg",
+            "./images/card-img-07.jpg",
+            "./images/card-img-08.jpg",
+            "./images/card-img-09.jpg",
+            "./images/card-img-10.jpg",
+            "./images/card-img-11.jpg",
+            "./images/card-img-12.jpg",
+            "./images/card-img-13.jpg",
+            "./images/card-img-14.jpg",
+            "./images/card-img-15.jpg",
+            "./images/card-img-16.jpg",
+            "./images/card-img-17.jpg",
+            "./images/card-img-18.jpg",
+            "./images/card-img-19.jpg",
+            "./images/card-img-20.jpg"
+        ];
 
         function updateCard() {
-            const name = document.getElementById("nameInput").value.trim();
-            document.getElementById("nameText").textContent = name ? "May ALLAH bless you, " + name : "May ALLAH bless you";
-            document.getElementById("hadithText").textContent = hadiths[Math.floor(Math.random() * hadiths.length)];
+            // Get user name input
+            const nameInput = document.getElementById("nameInput").value;
+            const nameText = document.getElementById("nameText");
+            nameText.textContent = nameInput ? "Peace be upon you, " + nameInput : "Peace be upon you";
+
+            // Set a random hadith
+            const hadithText = document.getElementById("hadithText");
+            const randomHadith = hadiths[Math.floor(Math.random() * hadiths.length)];
+            hadithText.textContent = randomHadith;
+            hadithText.classList.remove("hidden"); // Make hadith visible
+
+            // Set a random background image
+            const ecard = document.getElementById("ecard");
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+
+            ecard.style.backgroundImage = `linear-gradient(0deg, rgba(0,35,36,0.8) 0%, rgba(72, 72, 62, 0.8) 100%), url('${randomImage}'), linear-gradient(0deg, rgba(0,35,36,0.8) 0%, rgba(72, 72, 62, 0.8) 100%)`;
+            ecard.style.backgroundBlendMode = "overlay";
+            ecard.style.backgroundSize = "cover";
+            ecard.style.backgroundPosition = "center";
         }
-        
-        function downloadPDF() {
-            html2canvas(document.getElementById("ecard")).then(canvas => {
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF();
-                const imgData = canvas.toDataURL("image/png");
-                pdf.addImage(imgData, "PNG", 10, 10, 180, 180);
-                pdf.save("Eid_Card.pdf");
+
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const card = document.getElementById("ecard");
+
+            // Capture the card with very high resolution
+            const scaleFactor = 20; // Maximum DPI for ultra-high quality
+            const canvas = await html2canvas(card, {
+                scale: scaleFactor,
+                useCORS: true
             });
+
+            const imgData = canvas.toDataURL("image/png", 1.0);  // High-quality image
+
+            // Get the card's original width and height
+            const cardWidth = canvas.width / scaleFactor;  // Adjust to original card size
+            const cardHeight = canvas.height / scaleFactor;
+
+            // Create a new PDF with the same size as the card
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: [cardWidth, cardHeight],  // Set PDF size to match the card's size
+                compress: true
+            });
+
+            // Add the image to the PDF, ensuring it's positioned properly
+            pdf.addImage(imgData, "PNG", 0, 0, cardWidth, cardHeight, "", "FAST");
+
+            // Save the PDF with the card-only content
+            pdf.save("Eid_Card_HQ.pdf");
         }
 
         // Load a random hadith when the page loads
@@ -106,4 +184,5 @@ const hadiths = [
         });
     </script>
 </body>
+
 </html>
