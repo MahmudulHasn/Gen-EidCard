@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eid E-Card Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            background-image: url('./images/eid-img.png');
+            /* Change to your image path */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        #ecard {
+            background-color: rgba(0, 0, 0, 0.2);
+            /* Initial transparent background */
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            transition: background 0.5s ease-in-out;
+            /* Smooth transition effect */
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen">
+    <div class="bg-amber-300 p-6 rounded-xl shadow-lg text-center">
+        <h2 class="text-xl font-bold text-green-700 pb-3">Eid E-Card Generator</h2>
+        <div id="ecard"
+            class="relative w-80 h-80 p-4 rounded-lg flex flex-col items-center justify-center shadow-md overflow-hidden">
+            <div class="absolute top-4 left-4 text-white text-4xl">★</div>
+            <div class="absolute top-6 right-6 text-yellow-300 text-xl">★</div>
+            <div class="absolute top-10 right-10 text-white text-sm">★</div>
+
+            <h1 class="text-2xl font-bold text-white drop-shadow-lg">Eid Mubarak!</h1>
+            <p id="nameText" class="text-lg text-white mt-2 drop-shadow-lg">[Your Name]</p>
+            <p id="hadithText" class="text-sm text-white mt-5 pt-5 italic text-center drop-shadow-lg hidden"></p>
+        </div>
+        <input type="text" id="nameInput" placeholder="Enter your name" class="p-2 rounded w-full mt-4">
+        <button onclick="updateCard()" class="bg-green-600 text-white px-4 py-2 mt-2 rounded">Generate</button>
+        <button onclick="downloadPDF()" class="bg-blue-600 text-white px-4 py-2 mt-2 rounded">Download PDF</button>
+    </div>
+
+    <script>
+        const hadiths = [
+            "The best among you are those who have the best manners and character. - Bukhari",
+            "Exchange gifts, as that will lead to increasing your love to one another. - Bukhari",
+            "Smiling in the face of your brother is an act of charity. - Tirmidhi",
+            "Allah does not look at your appearance or wealth, but He looks at your hearts and actions. - Muslim"
+        ];
+
+        const images = [
+            "./images/pexels-ibnulharezmi-9288776.jpg",
+            "./images/pexels-apyfz-30947036.jpg",
+            "./images/pexels-lalezarfa-61078864-8059446.jpg",
+            "./images/pexels-shahid-ali-44398948-13162041.jpg"
+        ];
+
+        function updateCard() {
+            // Get user name input
+            const nameInput = document.getElementById("nameInput").value;
+            const nameText = document.getElementById("nameText");
+            nameText.textContent = nameInput ? nameInput : "[Your Name]";
+
+            // Set a random hadith
+            const hadithText = document.getElementById("hadithText");
+            const randomHadith = hadiths[Math.floor(Math.random() * hadiths.length)];
+            hadithText.textContent = randomHadith;
+            hadithText.classList.remove("hidden"); // Make hadith visible
+
+            // Set a random background image
+            const ecard = document.getElementById("ecard");
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+
+            ecard.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.6), rgba(52, 33, 0, 0.9)), url('${randomImage}')`;
+            ecard.style.backgroundBlendMode = "overlay";
+            ecard.style.backgroundSize = "cover";
+            ecard.style.backgroundPosition = "center";
+        }
+
+        async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const card = document.getElementById("ecard");
+
+    // Capture the card with very high resolution
+    const scaleFactor = 20; // Maximum DPI for ultra-high quality
+    const canvas = await html2canvas(card, { 
+        scale: scaleFactor, 
+        useCORS: true 
+    });
+
+    const imgData = canvas.toDataURL("image/png", 1.0);  // High-quality image
+
+    // Get the card's original width and height
+    const cardWidth = canvas.width / scaleFactor;  // Adjust to original card size
+    const cardHeight = canvas.height / scaleFactor;
+
+    // Create a new PDF with the same size as the card
+    const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: [cardWidth, cardHeight],  // Set PDF size to match the card's size
+        compress: true
+    });
+
+    // Add the image to the PDF, ensuring it's positioned properly
+    pdf.addImage(imgData, "PNG", 0, 0, cardWidth, cardHeight, "", "FAST");
+
+    // Save the PDF with the card-only content
+    pdf.save("Eid_Card_HQ.pdf");
+}
+
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>
