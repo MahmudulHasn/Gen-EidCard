@@ -35,7 +35,7 @@
         <h2 class="text-3xl font-bold text-white pb-3" style="font-family: 'Winky Sans', sans-serif;">Get Your Eid E-Card</h2>
         <div id="ecard"
             class="relative w-80 h-80 p-4 flex flex-col items-center justify-center shadow-md overflow-hidden">
-            <div class="absolute top-0 right-0 text-white opacity-75"> <img src="./images/template.png" alt=""></div>
+            <div class="absolute top-3 right-0 text-white opacity-75"> <img src="./images/template.png" alt=""></div>
 
             <h1 class="text-3xl font-bold text-amber-400 drop-shadow-lg"
                 style="font-family: 'Dancing Script', cursive;">EID MUBARAK !</h1>
@@ -46,9 +46,12 @@
                 style="font-family: 'Winky Sans', sans-serif;"></p>
         </div>
         <input type="text" id="nameInput" placeholder="Write your name .."
-            class="p-4 rounded bg-gray-900/50 text-white w-full mt-4 focus:outline-none">
+            class="p-2 rounded bg-gray-900/50 text-white w-full mt-4 focus:outline-none">
         <button onclick="updateCard()" class="bg-green-700 text-white px-4 py-2 mt-2 rounded">Generate</button>
         <button onclick="downloadPDF()" class="bg-amber-500 text-white px-4 py-2 mt-2 rounded">Download Card</button>
+        <h3 class="text-gray-400 text-sm pt-2">Please wait a moment after clicking Download.</h3>
+        <h3 class="text-gray-300 text-sm pt-1">Click Generate again to change image & hadith.</h3>
+
     </div>
 
     <a href="https://github.com/MahmudulHasn" target="_blank"
@@ -151,7 +154,7 @@
             const ecard = document.getElementById("ecard");
             const randomImage = images[Math.floor(Math.random() * images.length)];
 
-            ecard.style.backgroundImage = `linear-gradient(0deg, rgba(0,35,36,0.8) 0%, rgba(72, 72, 62, 0.8) 100%), url('${randomImage}'), linear-gradient(0deg, rgba(0,35,36,0.8) 0%, rgba(72, 72, 62, 0.8) 100%)`;
+            ecard.style.backgroundImage = `linear-gradient(0deg, rgba(0,35,36,0.8) 0%, rgba(72, 72, 62, 0.8) 100%), url('${randomImage}'), linear-gradient(0deg, rgba(0,35,36,0.5) 0%, rgba(72, 72, 62, 0.5) 100%)`;
             ecard.style.backgroundBlendMode = "overlay";
             ecard.style.backgroundSize = "cover";
             ecard.style.backgroundPosition = "center";
@@ -186,7 +189,7 @@
             pdf.addImage(imgData, "PNG", 0, 0, cardWidth, cardHeight, "", "FAST");
 
             // Save the PDF with the card-only content
-            pdf.save("Eid_Card_HQ.pdf");
+            pdf.save("Eid_Card_MH.pdf");
         }
 
         // Load a random hadith when the page loads
