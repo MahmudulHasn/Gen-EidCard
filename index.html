@@ -5,11 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eid Card</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Winky+Sans&display=swap" rel="stylesheet">
+
+    <!--  Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Winky+Sans&display=swap"rel="stylesheet">
 
     <style>
         #ecard {
@@ -25,9 +31,8 @@
 
 <body class="flex items-center justify-center min-h-screen backdrop-blur-sm overflow-hidden"
     style="background: url('./images/bg-01.jpg'), linear-gradient(0deg, rgba(83, 84, 84, 0.97) 0%, rgba(106, 106, 105, 0.975) 100%); background-blend-mode: overlay; background-size: cover; background-position: center;">
-    <div class="p-2 shadow-lg text-center">
-        <h2 class="text-3xl font-bold text-white pb-3" style="font-family: 'Winky Sans', sans-serif;">Eid E-Card
-            Generator</h2>
+    <div class="p-4 shadow-lg text-center">
+        <h2 class="text-3xl font-bold text-white pb-3" style="font-family: 'Winky Sans', sans-serif;">Get Your Eid E-Card</h2>
         <div id="ecard"
             class="relative w-80 h-80 p-4 flex flex-col items-center justify-center shadow-md overflow-hidden">
             <div class="absolute top-0 right-0 text-white opacity-75"> <img src="./images/template.png" alt=""></div>
@@ -36,7 +41,8 @@
                 style="font-family: 'Dancing Script', cursive;">EID MUBARAK !</h1>
             <p id="nameText" class="text-md text-white mt-2 drop-shadow-lg "
                 style="font-family: 'Winky Sans', sans-serif;">[Write a Name]</p>
-            <p id="hadithText" class="text-sm text-amber-100 font-bold mt-5 pt-5 italic text-center drop-shadow-lg hidden"
+            <p id="hadithText"
+                class="text-sm text-amber-100 font-bold mt-5 pt-5 italic text-center drop-shadow-lg hidden"
                 style="font-family: 'Winky Sans', sans-serif;"></p>
         </div>
         <input type="text" id="nameInput" placeholder="Write your name .."
@@ -44,6 +50,11 @@
         <button onclick="updateCard()" class="bg-green-700 text-white px-4 py-2 mt-2 rounded">Generate</button>
         <button onclick="downloadPDF()" class="bg-amber-500 text-white px-4 py-2 mt-2 rounded">Download Card</button>
     </div>
+
+    <a href="https://github.com/MahmudulHasn" target="_blank"
+        class="fixed bottom-4 right-4 bg-gray-800/50 text-gray-400 px-3 py-2 rounded-full shadow-lg font-bold text-sm hover:text-gray-300">
+        Contributor
+    </a>
 
     <script>
         const hadiths = [
@@ -151,7 +162,7 @@
             const card = document.getElementById("ecard");
 
             // Capture the card with very high resolution
-            const scaleFactor = 20; // Maximum DPI for ultra-high quality
+            const scaleFactor = 15; // Maximum DPI for ultra-high quality
             const canvas = await html2canvas(card, {
                 scale: scaleFactor,
                 useCORS: true
