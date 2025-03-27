@@ -27,21 +27,86 @@
             transition: background 0.5s ease-in-out;
             /* Smooth transition effect */
         }
+ /*========================================== 
+            starting animation
+  ==========================================*/
+
+.right-slide-animation{
+  opacity: 0;
+  animation: slideRight 1s ease forwards;
+  animation-delay: 0.3s;
+}
+.left-slide-animation{
+  opacity: 0;
+  animation: slideLeft 1s ease forwards;
+  animation-delay: 0.3s;
+}
+.top-slide-animation{
+  opacity: 0;
+  animation: slideTop 1s ease forwards;
+  animation-delay: 0.3s;
+}
+.bottom-slide-animation{
+  opacity: 0;
+  animation: slideBottom 1s ease forwards;
+  animation-delay: 0.3s;
+}
+
+@keyframes slideRight{
+  0% {
+      transform: translateX(-100px);
+      opacity: 0;
+  }
+  100% {
+      transform: translateX(0px);
+      opacity: 1;
+  }
+}
+@keyframes slideLeft{
+  0% {
+      transform: translateX(100px);
+      opacity: 0;
+  }
+  100% {
+      transform: translateX(0px);
+      opacity: 1;
+  }
+}
+@keyframes slideTop{
+  0% {
+      transform: translateY(-100px);
+      opacity: 0;
+  }
+  100% {
+      transform: translateY(0px);
+      opacity: 1;
+  }
+}
+@keyframes slideBottom{
+  0% {
+      transform: translateY(100px);
+      opacity: 0;
+  }
+  100% {
+      transform: translateY(0px);
+      opacity: 1;
+  }
+}
     </style>
 </head>
 
 <body class="flex items-center justify-center min-h-screen backdrop-blur-sm overflow-hidden"
     style="background: url('./images/bg-01.jpg'), linear-gradient(0deg, rgba(83, 84, 84, 0.97) 0%, rgba(106, 106, 105, 0.975) 100%); background-blend-mode: overlay; background-size: cover; background-position: center;">
     <div class="p-4 shadow-lg text-center">
-        <h2 class="text-3xl font-bold text-white pb-3" style="font-family: 'Winky Sans', sans-serif;">Get Your Eid
+        <h2 class="text-3xl font-bold text-white pb-3 top-slide-animation" style="font-family: 'Winky Sans', sans-serif;">Get Your Eid
             E-Card</h2>
         <div id="ecard"
             class="relative w-80 h-80 p-4 flex flex-col items-center justify-center shadow-md overflow-hidden">
             <div class="absolute top-3 right-0 text-white opacity-75"> <img src="./images/template.png" alt=""></div>
 
-            <h1 class="text-3xl font-bold text-amber-400 drop-shadow-lg"
+            <h1 class="text-3xl font-bold text-amber-400 drop-shadow-lg right-slide-animation"
                 style="font-family: 'Dancing Script', cursive;">EID MUBARAK !</h1>
-            <p id="nameText" class="text-md text-white mt-2 drop-shadow-lg "
+            <p id="nameText" class="text-md text-white mt-2 drop-shadow-lg bottom-slide-animation"
                 style="font-family: 'Winky Sans', sans-serif;">[Write a Name]</p>
             <p id="hadithText"
                 class="text-sm text-amber-100 font-bold mt-5 pt-5 italic text-center drop-shadow-lg hidden"
@@ -51,8 +116,8 @@
         </div>
         <input type="text" id="nameInput" placeholder="Write your name .."
             class="p-2 rounded bg-gray-900/50 text-white w-full mt-4 focus:outline-none">
-        <button onclick="updateCard()" class="bg-green-700 text-white px-4 py-2 mt-2 rounded">Generate</button>
-        <button onclick="downloadJPG()" class="bg-amber-500 text-white px-4 py-2 mt-2 rounded">Download</button>
+        <button onclick="updateCard()" class="bg-green-700 text-white px-4 py-2 mt-2 rounded right-slide-animation">Generate</button>
+        <button onclick="downloadJPG()" class="bg-amber-500 text-white px-4 py-2 mt-2 rounded left-slide-animation">Download</button>
         <h3 class="text-gray-400 text-sm pt-2">Please wait a moment after clicking Download.</h3>
         <h3 class="text-gray-300 text-sm pt-1">Click again Generate to change image & hadith.</h3>
 
