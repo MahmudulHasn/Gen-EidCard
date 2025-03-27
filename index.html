@@ -20,7 +20,7 @@
 
     <style>
         #ecard {
-            background: linear-gradient(0deg, rgba(0, 35, 36, 0.7) 0%, rgba(72, 72, 62, 0.7) 100%);
+            background: linear-gradient(0deg, rgba(0, 29, 30, 0.7) 0%, rgba(49, 49, 42, 0.7) 100%);
             background-size: cover;
             background-position: center;
             background-blend-mode: overlay;
@@ -46,11 +46,13 @@
             <p id="hadithText"
                 class="text-sm text-amber-100 font-bold mt-5 pt-5 italic text-center drop-shadow-lg hidden"
                 style="font-family: 'Winky Sans', sans-serif;"></p>
+            <p class="absolute text-gray-600/50 bottom-2 right-1 text-sm">القدس الحرة</p> 
+            <p class="absolute text-gray-700/50 bottom-2 left-1 text-sm">eidcard.pages.dev</p>    
         </div>
         <input type="text" id="nameInput" placeholder="Write your name .."
             class="p-2 rounded bg-gray-900/50 text-white w-full mt-4 focus:outline-none">
         <button onclick="updateCard()" class="bg-green-700 text-white px-4 py-2 mt-2 rounded">Generate</button>
-        <button onclick="downloadJPG()" class="bg-amber-500 text-white px-4 py-2 mt-2 rounded">Download Card</button>
+        <button onclick="downloadJPG()" class="bg-amber-500 text-white px-4 py-2 mt-2 rounded">Download</button>
         <h3 class="text-gray-400 text-sm pt-2">Please wait a moment after clicking Download.</h3>
         <h3 class="text-gray-300 text-sm pt-1">Click again Generate to change image & hadith.</h3>
 
@@ -58,7 +60,7 @@
 
     <a href="https://github.com/MahmudulHasn" target="_blank"
         class="fixed bottom-4 right-4 bg-gray-800/50 text-gray-400 px-3 py-2 rounded-full shadow-lg font-bold text-sm hover:text-gray-300">
-        Contributor
+        Gift from
     </a>
 
     <script>
@@ -165,7 +167,7 @@
             const ecard = document.getElementById("ecard");
             const randomImage = images[Math.floor(Math.random() * images.length)];
 
-            ecard.style.backgroundImage = `linear-gradient(0deg, rgba(0,35,36,0.8) 0%, rgba(72, 72, 62, 0.8) 100%), url('${randomImage}'), linear-gradient(0deg, rgba(0,35,36,0.5) 0%, rgba(72, 72, 62, 0.5) 100%)`;
+            ecard.style.backgroundImage = `linear-gradient(0deg, rgba(0,35,36,0.9) 0%, rgba(72, 72, 62, 0.9) 100%), url('${randomImage}'), linear-gradient(0deg, rgba(0,35,36,0.5) 0%, rgba(72, 72, 62, 0.5) 100%)`;
             ecard.style.backgroundBlendMode = "overlay";
             ecard.style.backgroundSize = "cover";
             ecard.style.backgroundPosition = "center";
